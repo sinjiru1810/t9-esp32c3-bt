@@ -4,8 +4,7 @@
 #include <dt-bindings/zmk/mouse.h>
 
 / {
-    // Definisi Matrix untuk SuperMini
-    // Pin GPIO: Row (0,1,2,3) dan Col (4,5,6,7)
+    // Definisi Matrix untuk ESP32-C3 SuperMini (Row: 0,1,2,3 | Col: 4,5,6,7)
     kscan0: kscan_0 {
         compatible = "zmk,kscan-gpio-matrix";
         diode-direction = "col2row";
@@ -28,24 +27,18 @@
     };
 
     behaviors {
-        // T9 Multitap (Contoh: Tombol 2)
-        td_abc: td_abc {
-            compatible = "zmk,behavior-tap-dance";
-            #binding-cells = <0>;
-            tapping-term-ms = <400>;
-            bindings = <&kp A>, <&kp B>, <&kp C>, <&kp N2>;
-        };
+        // T9 Multitap Behaviors
+        td_abc: td_abc { compatible = "zmk,behavior-tap-dance"; #binding-cells = <0>; tapping-term-ms = <400>; bindings = <&kp A>, <&kp B>, <&kp C>, <&kp N2>; };
+        td_def: td_def { compatible = "zmk,behavior-tap-dance"; #binding-cells = <0>; tapping-term-ms = <400>; bindings = <&kp D>, <&kp E>, <&kp F>, <&kp N3>; };
+        td_ghi: td_ghi { compatible = "zmk,behavior-tap-dance"; #binding-cells = <0>; tapping-term-ms = <400>; bindings = <&kp G>, <&kp H>, <&kp I>, <&kp N4>; };
+        td_jkl: td_jkl { compatible = "zmk,behavior-tap-dance"; #binding-cells = <0>; tapping-term-ms = <400>; bindings = <&kp J>, <&kp K>, <&kp L>, <&kp N5>; };
+        td_mno: td_mno { compatible = "zmk,behavior-tap-dance"; #binding-cells = <0>; tapping-term-ms = <400>; bindings = <&kp M>, <&kp N>, <&kp O>, <&kp N6>; };
+        td_pqrs: td_pqrs { compatible = "zmk,behavior-tap-dance"; #binding-cells = <0>; tapping-term-ms = <400>; bindings = <&kp P>, <&kp Q>, <&kp R>, <&kp S>, <&kp N7>; };
+        td_tuv: td_tuv { compatible = "zmk,behavior-tap-dance"; #binding-cells = <0>; tapping-term-ms = <400>; bindings = <&kp T>, <&kp U>, <&kp V>, <&kp N8>; };
+        td_wxyz: td_wxyz { compatible = "zmk,behavior-tap-dance"; #binding-cells = <0>; tapping-term-ms = <400>; bindings = <&kp W>, <&kp X>, <&kp Y>, <&kp Z>, <&kp N9>; };
 
-        // Tambahkan td_def, td_ghi, dsb di sini...
-
-        // Logika S1 (Shoulder 1)
-        td_s1: td_s1 {
-            compatible = "zmk,behavior-tap-dance";
-            #binding-cells = <0>;
-            tapping-term-ms = <250>;
-            bindings = <&kp BSPC>, <&mc_caps_bspc>;
-        };
-
+        // S1 Shoulder: 1x Backspace, 2x Caps+BS, Hold: Repeat BS
+        td_s1: td_s1 { compatible = "zmk,behavior-tap-dance"; #binding-cells = <0>; tapping-term-ms = <250>; bindings = <&kp BSPC>, <&mc_caps_bspc>; };
         sh_s1: sh_s1 {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <0>;
@@ -54,27 +47,24 @@
             bindings = <&kp BSPC>, <&td_s1>;
         };
 
-        // Logika S2 (Shoulder 2) - Layer Switcher
-        td_s2: td_s2 {
-            compatible = "zmk,behavior-tap-dance";
-            #binding-cells = <0>;
-            tapping-term-ms = <300>;
-            bindings = <&to 0>, <&to 1>, <&to 2>;
-        };
+        // S2 Shoulder: Layer Cycle (0 -> 1 -> 2)
+        td_s2: td_s2 { compatible = "zmk,behavior-tap-dance"; #binding-cells = <0>; tapping-term-ms = <350>; bindings = <&to 0>, <&to 1>, <&to 2>; };
     };
 
     keymap {
         compatible = "zmk,keymap";
 
+        // L0: Nokia T9 Default
         default_layer {
             bindings = <
-                &kp N1     &td_abc    &kp N3     &sh_s1
-                &kp N4     &kp N5     &kp N6     &td_s2
-                &kp N7     &kp N8     &kp N9     &none
+                &kp N1     &td_abc    &td_def    &sh_s1
+                &td_ghi    &td_jkl    &td_mno    &td_s2
+                &td_pqrs   &td_tuv    &td_wxyz   &none
                 &kp STAR   &kp N0     &kp HASH   &none
             >;
         };
 
+        // L1: Nav & Mouse
         nav_layer {
             bindings = <
                 &kp ESC    &kp UP     &kp PG_UP  &trans
@@ -84,6 +74,7 @@
             >;
         };
 
+        // L2: Symbols
         sym_layer {
             bindings = <
                 &kp EXCL   &kp AT     &kp HASH   &trans
